@@ -12,8 +12,9 @@ import com.emp.jpa.business.service.EmployeeServiceImpl;
 
 
 /**
+ * Implementation class for EmployeeController
+ * 
  * @author Tripti
- *
  */
 public class EmployeeControllerImpl implements EmployeeController {
 

@@ -20,6 +20,7 @@ public class Department {
 
 	@Column(name="DEPARTMENT_ID")
 	@Id
+	//@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SYS.DEPARTMENT_ID_SEQ")
 	private Long departmentId;
 	
 	@Column(name="DEPARTMENT_NAME")
