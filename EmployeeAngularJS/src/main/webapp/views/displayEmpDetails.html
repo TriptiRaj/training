@@ -4,7 +4,7 @@
 
 <br>
 <br>
-<table>
+<table ng-show = "passedEmployee.employeeId">
 <tr>
 	<th>S.No.</th>
 	<th>Employee Id</th>
@@ -16,3 +16,4 @@
 	<td>{{passedEmployee.employeeFullName}}</td>
 </tr>
 </table>
+<p ng-hide = "passedEmployee.employeeId">No Employee data found.</p>

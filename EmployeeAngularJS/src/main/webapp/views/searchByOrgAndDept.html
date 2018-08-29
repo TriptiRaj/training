@@ -1,7 +1,8 @@
 <a ui-sref ="displaySearchEmpPage"  ui-sref-active="active">Back to Search Employee Page</a><br>
 <a ui-sref ="welcome" >Back to Home Page</a>
 <br>
-<p>Organisation : <select ng-model = "selectedOrg" ng-options = "x.organisationName for x in organisationList" ng-change = "populateDepartments()"></select></p>
-
-<p>Department : <select ng-model = "selectedDept" ng-options = "x.departmentName for x in departmentList"></select></p>
-<button ng-click = searchEmpByOrgAndDept() >Search</button>
+<form>
+	<p>Organisation : <select ng-model = "selectedOrg" ng-options = "x.organisationName for x in organisationList" ng-change = "populateDepartments()" required></select></p>
+	<p>Department : <select ng-model = "selectedDept" ng-options = "x.departmentName for x in departmentList" required></select></p>
+	<button ng-click = searchEmpByOrgAndDept() >Search</button>
+</form>

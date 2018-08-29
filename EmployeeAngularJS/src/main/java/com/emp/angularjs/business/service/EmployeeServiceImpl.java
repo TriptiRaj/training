@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.emp.angularjs.business.dataaccess.EmployeeDataAccess;
+import com.emp.angularjs.business.dataaccess.MongoDBDataAccess;
 import com.emp.angularjs.business.entity.Department;
 import com.emp.angularjs.business.entity.Employee;
 import com.emp.angularjs.business.entity.Organisation;
@@ -21,8 +21,11 @@ import com.emp.angularjs.business.entity.Organisation;
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
 
+/*	@Autowired
+	private EmployeeDataAccess empDataAccess;*/
+	
 	@Autowired
-	private EmployeeDataAccess empDataAccess;
+	private MongoDBDataAccess empDataAccess;
 	
 	@Override
 	public void addEmployee(final Employee employee) {

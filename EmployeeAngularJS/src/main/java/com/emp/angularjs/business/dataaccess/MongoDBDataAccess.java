@@ -8,9 +8,9 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.emp.angularjs.business.config.MongoConfig;
 import com.emp.angularjs.business.entity.Department;
 import com.emp.angularjs.business.entity.Employee;
 import com.emp.angularjs.business.entity.Organisation;
@@ -31,76 +31,23 @@ public class MongoDBDataAccess implements EmployeeDataAccess {
 	private static final Logger LOGGER = LogManager.getLogger(MongoDBDataAccess.class);
 	
 	@Autowired
-	public static MongoDatabase db;
-	
-	public static void main(String[] args) {
-
-/*		//Code to test add emp	
-  		db = MongoConfig.getMongoDB();
-		MongoCollection<Employee> collection = db.getCollection("employeeDetails", Employee.class);
-		Employee employee = new Employee();
-		employee.setDepartmentId(140l);
-		employee.setOrganisationId(200l);
-		employee.setEmployeeId(1l);
-		employee.setEmployeeFullName("Simba King");
-		collection.insertOne(employee);
-        LOGGER.debug(employee+" Inserted into DB");
-        LOGGER.info("Employee successfully added.");		
-		*/
-		
-/*		//code to test update employee
-  		db = MongoConfig.getMongoDB();
-		MongoCollection<Employee> collection = db.getCollection("employeeDetails", Employee.class);
-		Employee employee = new Employee();
-		employee.setDepartmentId(111l);
-		employee.setOrganisationId(222l);
-		employee.setEmployeeId(1l);
-		employee.setEmployeeFullName("Chaitu the prince");
-		new MongoDBDataAccess().updateEmplpoyee(employee);*/
-
-/*		//code to test search by orgId and deptId
-  		db = MongoConfig.getMongoDB();
-		MongoCollection<Employee> collection = db.getCollection("employeeDetails", Employee.class);
-		Employee employee = new Employee();
-		employee.setDepartmentId(111l);
-		employee.setOrganisationId(222l);
-		new MongoDBDataAccess().searchEmployee(employee.getOrganisationId(), employee.getDepartmentId());*/
-		
-/*		//code to test search by emp Id
-  		db = MongoConfig.getMongoDB();
-		MongoCollection<Employee> collection = db.getCollection("employeeDetails", Employee.class);
-		Employee employee = new Employee();
-		employee.setEmployeeId(1l);
-		new MongoDBDataAccess().searchEmployeeById(employee.getEmployeeId());*/
-		
-/*		//code to test delete emp
-  		db = MongoConfig.getMongoDB();
-		MongoCollection<Employee> collection = db.getCollection("employeeDetails", Employee.class);
-		Employee employee = new Employee();
-		employee.setEmployeeId(1l);
-		new MongoDBDataAccess().deleteEmployee(employee.getEmployeeId());*/
-		
-		//code to test getOrganisations
-  		db = MongoConfig.getMongoDB();
-		MongoCollection<Employee> collection = db.getCollection("organisations", Employee.class);
-		new MongoDBDataAccess().getOrganisations();
-		
-		//code to test search by orgId and deptId
-/*  		db = MongoConfig.getMongoDB();
-		MongoCollection<Employee> collection = db.getCollection("organisations", Employee.class);
-		Employee employee = new Employee();
-		employee.setOrganisationId(2l);
-		new MongoDBDataAccess().getDepartmentsForOrganisation(employee.getOrganisationId());
-		*/
-	}
+	private MongoDatabase db;
 	
 	/* (non-Javadoc)
 	 * @see com.emp.angularjs.business.dataaccess.EmployeeDataAccess#addEmployee(com.emp.angularjs.business.entity.Employee)
 	 */
 	@Override
 	public void addEmployee(Employee employee) {
+		Long generatedValue = 0l;
+		MongoCollection countersCollection = db.getCollection("counters");
+		Document beforeUpdate = (Document)countersCollection.findOneAndUpdate(new BasicDBObject("seqType", "EMP_SEQ"), new BasicDBObject("$inc", new BasicDBObject("sequenceValue", 1)));
+		generatedValue = beforeUpdate.getLong("sequenceValue") + 1 ;
+		LOGGER.debug("The incr value is : " +  generatedValue);
+		
+		employee.setEmployeeId(generatedValue);
 		MongoCollection<Employee> collection = db.getCollection("employeeDetails", Employee.class);
 		collection.insertOne(employee);
+		
         LOGGER.debug(employee+" Inserted into DB");
         LOGGER.info("Employee successfully added.");
 	}
@@ -126,9 +73,8 @@ public class MongoDBDataAccess implements EmployeeDataAccess {
 		update.append("$set", finalValues);
 		collection.findOneAndUpdate(filter, update);
 		
-        LOGGER.debug(employee+" Inserted into DB");
-        LOGGER.info("Employee successfully added.");
-
+        LOGGER.debug(employee+" Updated into DB");
+        LOGGER.info("Employee successfully updated.");
 	}
 
 	/* (non-Javadoc)
@@ -147,7 +93,9 @@ public class MongoDBDataAccess implements EmployeeDataAccess {
 		for(Employee emp : empIterable) {
 			employeeList.add(emp);
 		}
-		return employeeList;
+        LOGGER.debug("Employees fetched for Organinsation Id - "+organisationId+" and department Id - "+departmentId+" are - "+employeeList);
+        LOGGER.info("Employees fetched succesfully.");
+        return employeeList;
 	}
 
 	/* (non-Javadoc)
@@ -162,6 +110,8 @@ public class MongoDBDataAccess implements EmployeeDataAccess {
 		//find
 		FindIterable<Employee> empIterable =  collection.find(filter);
 		Employee employee = empIterable.first();
+        LOGGER.debug("Employee fetched for Employee Id - "+employeeId+" is - "+employee);
+        LOGGER.info("Employee fetched succesfully.");
 		return employee;
 	}
 
@@ -169,14 +119,16 @@ public class MongoDBDataAccess implements EmployeeDataAccess {
 	 * @see com.emp.angularjs.business.dataaccess.EmployeeDataAccess#deleteEmployee(java.lang.Long)
 	 */
 	@Override
-	public void deleteEmployee(Long employeeId) {
+	public boolean deleteEmployee(Long employeeId) {
 		MongoCollection<Employee> collection = db.getCollection("employeeDetails", Employee.class);
 		//filter
 		BasicDBObject filter = new BasicDBObject();
 		filter.append("employeeId", employeeId);
 		//find
 		DeleteResult result = collection.deleteOne(filter);
-		//return result.wasAcknowledged();
+        LOGGER.debug("Employee with Employee Id - "+employeeId+" is deleted.");
+        LOGGER.info("Employee deleted succesfully.");
+		return result.wasAcknowledged();
 	}
 
 	/* (non-Javadoc)
@@ -185,18 +137,15 @@ public class MongoDBDataAccess implements EmployeeDataAccess {
 	@Override
 	public List<Department> getDepartmentsForOrganisation(Long organisationId) {
 		MongoCollection<Organisation> collection = db.getCollection("organisations", Organisation.class);
-		//filter
+		//filter to apply
 		BasicDBObject filter = new BasicDBObject();
 		filter.append("organisationId", organisationId);
 		
-		BasicDBObject projection = new BasicDBObject();
-		projection.put("departments", 1);
-		
 		//find
-		//FindIterable<Department> departmentIterable =  collection.find(filter,Department.class).projection(Projections.include("departments")).projection(Projections.exclude("_id"));
 		Organisation organisation =  collection.find(filter,Organisation.class).first();
 		List<Department> departmentList = organisation.getDepartments();
-
+        LOGGER.debug("Departments fetched for organisation Id - "+organisationId+" are - "+departmentList);
+        LOGGER.info("Departments for selected organisation fetched succesfully.");
 		return departmentList;
 	}
 
@@ -206,20 +155,12 @@ public class MongoDBDataAccess implements EmployeeDataAccess {
 	@Override
 	public List<Organisation> getOrganisations() {
 		MongoCollection<Organisation> collection = db.getCollection("organisations", Organisation.class);
-
-		//find
-		FindIterable<Organisation> orgIterable =  collection.find().projection(Projections.include("organisationId","organisationName"));//(filter, Organisation.class);
-		//FindIterable<Organisation> orgIterable =  collection.find();
-		List<Organisation> organisationList = new ArrayList<Organisation>();
 		
-/*        while (reader.readBsonType() != BsonType.END_OF_DOCUMENT) {
-        	organisationList.add(readValue(reader, decoderContext));
-        }*/
-        
-		for(Organisation org : orgIterable) {
-			organisationList.add(org);
-		}
+		//find
+		List<Organisation> organisationList =  collection.find().projection(
+						Projections.include("organisationId","organisationName")).into(new ArrayList<Organisation>());
+        LOGGER.debug("Organisations fetched are - "+organisationList);
+        LOGGER.info("Organisations fetched succesfully.");
 		return organisationList;
 	}
-
 }

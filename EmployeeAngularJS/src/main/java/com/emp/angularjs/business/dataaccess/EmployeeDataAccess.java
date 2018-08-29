@@ -53,7 +53,7 @@ public interface EmployeeDataAccess {
 	 * 
 	 * @param employeeId		identifier of the employee to be removed.
 	 */
-	public void deleteEmployee(final Long employeeId);
+	public boolean deleteEmployee(final Long employeeId);
 	
 	/**
 	 * Search Departments for a particular organisation. 

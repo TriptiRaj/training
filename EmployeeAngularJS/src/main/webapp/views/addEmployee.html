@@ -1,7 +1,8 @@
-<a ui-sref ="welcome">Back to Home Page</a><br>
-<p>Employee Name: <input type="text" ng-model="employeeFullName"></p>
-<p>Employee Organisation : <select ng-model = "selectedOrg" ng-options = "x.organisationName for x in organisationList" ng-change = "populateDepartments()"></select></p>
-
-<p>Employee Department : <select ng-model = "selectedDept" ng-options = "x.departmentName for x in departmentList"></select></p>
-
-<button ng-click = addEmployee() >Add Employee</button>
+<a ui-sref ="welcome">Back to Home Page</a>
+<br>
+<form>
+	<p>Employee Full Name: <input type="text" ng-model="employeeFullName" required></p>
+	<p>Employee Organisation : <select ng-model = "selectedOrg" ng-options = "x.organisationName for x in organisationList" ng-change = "populateDepartments()" required></select></p>
+	<p>Employee Department : <select ng-model = "selectedDept" ng-options = "x.departmentName for x in departmentList" required></select></p>
+	<button ng-click = addEmployee() >Add Employee</button>
+</form>

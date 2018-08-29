@@ -10,8 +10,10 @@ import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import com.emp.angularjs.business.dataaccess.MongoDBDataAccess;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoDatabase;
@@ -22,8 +24,14 @@ import com.mongodb.client.MongoDatabase;
  * Provides connection to Mongo DB
  */
 @Configuration
+@ComponentScan(basePackages = "com.emp.springmvc.business")
 public class MongoConfig {
 	
+	/**
+	 * Creates an instance of MongoDatabase.
+	 * 
+	 * @return	MongoDB instance
+	 */
 	@Bean
 	public static MongoDatabase getMongoDB() {
 		MongoDatabase db = null;
@@ -37,5 +45,15 @@ public class MongoConfig {
 		}
 
 		return db;
+	}
+	
+	/**
+	 * Mongo DB Data access class
+	 * 
+	 * @return 		MongoDBDataAccess instance
+	 */
+	@Bean
+	public MongoDBDataAccess getDataAccess () {
+		return new MongoDBDataAccess();
 	}
 }

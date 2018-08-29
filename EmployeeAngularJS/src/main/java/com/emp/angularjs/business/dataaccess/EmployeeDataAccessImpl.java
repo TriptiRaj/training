@@ -103,7 +103,7 @@ public class EmployeeDataAccessImpl implements EmployeeDataAccess {
 	 * @see com.emp.angularjs.business.dataaccess.EmployeeDataAccess#deleteEmployee(java.lang.Long)
 	 */
 	@Override
-	public void deleteEmployee(final Long employeeId) {
+	public boolean deleteEmployee(final Long employeeId) {
 		EntityTransaction transaction = entityMnager.getTransaction();
 		transaction.begin();
 		Employee employee = entityMnager.find(Employee.class, employeeId);
@@ -111,6 +111,8 @@ public class EmployeeDataAccessImpl implements EmployeeDataAccess {
         LOGGER.debug("Employee with employee id - "+employeeId+" deleted");
         LOGGER.info("Employee deleted successfully.");
 		transaction.commit();
+		// TODO: change this
+		return true;
 	}
 
 	/*
