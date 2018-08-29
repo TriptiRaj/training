@@ -18,6 +18,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Projections;
 import com.mongodb.client.result.DeleteResult;
 
 /**
@@ -72,12 +73,25 @@ public class MongoDBDataAccess implements EmployeeDataAccess {
 		employee.setEmployeeId(1l);
 		new MongoDBDataAccess().searchEmployeeById(employee.getEmployeeId());*/
 		
-		//code to test delete emp
+/*		//code to test delete emp
   		db = MongoConfig.getMongoDB();
 		MongoCollection<Employee> collection = db.getCollection("employeeDetails", Employee.class);
 		Employee employee = new Employee();
 		employee.setEmployeeId(1l);
-		new MongoDBDataAccess().deleteEmployee(employee.getEmployeeId());
+		new MongoDBDataAccess().deleteEmployee(employee.getEmployeeId());*/
+		
+		//code to test getOrganisations
+  		db = MongoConfig.getMongoDB();
+		MongoCollection<Employee> collection = db.getCollection("organisations", Employee.class);
+		new MongoDBDataAccess().getOrganisations();
+		
+		//code to test search by orgId and deptId
+/*  		db = MongoConfig.getMongoDB();
+		MongoCollection<Employee> collection = db.getCollection("organisations", Employee.class);
+		Employee employee = new Employee();
+		employee.setOrganisationId(2l);
+		new MongoDBDataAccess().getDepartmentsForOrganisation(employee.getOrganisationId());
+		*/
 	}
 	
 	/* (non-Javadoc)
@@ -170,8 +184,20 @@ public class MongoDBDataAccess implements EmployeeDataAccess {
 	 */
 	@Override
 	public List<Department> getDepartmentsForOrganisation(Long organisationId) {
-		// TODO Auto-generated method stub
-		return null;
+		MongoCollection<Organisation> collection = db.getCollection("organisations", Organisation.class);
+		//filter
+		BasicDBObject filter = new BasicDBObject();
+		filter.append("organisationId", organisationId);
+		
+		BasicDBObject projection = new BasicDBObject();
+		projection.put("departments", 1);
+		
+		//find
+		//FindIterable<Department> departmentIterable =  collection.find(filter,Department.class).projection(Projections.include("departments")).projection(Projections.exclude("_id"));
+		Organisation organisation =  collection.find(filter,Organisation.class).first();
+		List<Department> departmentList = organisation.getDepartments();
+
+		return departmentList;
 	}
 
 	/* (non-Javadoc)
@@ -179,8 +205,21 @@ public class MongoDBDataAccess implements EmployeeDataAccess {
 	 */
 	@Override
 	public List<Organisation> getOrganisations() {
-		// TODO Auto-generated method stub
-		return null;
+		MongoCollection<Organisation> collection = db.getCollection("organisations", Organisation.class);
+
+		//find
+		FindIterable<Organisation> orgIterable =  collection.find().projection(Projections.include("organisationId","organisationName"));//(filter, Organisation.class);
+		//FindIterable<Organisation> orgIterable =  collection.find();
+		List<Organisation> organisationList = new ArrayList<Organisation>();
+		
+/*        while (reader.readBsonType() != BsonType.END_OF_DOCUMENT) {
+        	organisationList.add(readValue(reader, decoderContext));
+        }*/
+        
+		for(Organisation org : orgIterable) {
+			organisationList.add(org);
+		}
+		return organisationList;
 	}
 
 }

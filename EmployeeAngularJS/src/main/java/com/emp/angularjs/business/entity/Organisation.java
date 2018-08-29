@@ -3,9 +3,13 @@
  */
 package com.emp.angularjs.business.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -25,8 +29,8 @@ public class Organisation {
 	@Column(name="ORGANISATION_NAME")
 	private String organisationName;
 	
-/*	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
-	private List<Department> departments*/;
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+	private List<Department> departments;
 
 	/**
 	 * @return the organisationId
@@ -38,17 +42,17 @@ public class Organisation {
 	/**
 	 * @return the departments
 	 */
-/*	public List<Department> getDepartments() {
+	public List<Department> getDepartments() {
 		return departments;
 	}
 
-	*//**
+	/**
 	 * @param departments the departments to set
-	 *//*
+	 */
 	public void setDepartments(List<Department> departments) {
 		this.departments = departments;
 	}
-*/
+
 	/**
 	 * @param organisationId the organisationId to set
 	 */
