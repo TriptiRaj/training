@@ -3,20 +3,14 @@
  */
 package com.emp.angularjs.business.config;
 
-import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
-import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
-
-import org.bson.codecs.configuration.CodecProvider;
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.codecs.pojo.PojoCodecProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-import com.emp.angularjs.business.dataaccess.MongoDBDataAccess;
+import com.emp.angularjs.business.dataaccess.SequenceMongoDataAccessImpl;
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientOptions;
-import com.mongodb.client.MongoDatabase;
 
 /**
  * @author Tripti
@@ -24,7 +18,8 @@ import com.mongodb.client.MongoDatabase;
  * Provides connection to Mongo DB
  */
 @Configuration
-@ComponentScan(basePackages = "com.emp.springmvc.business")
+@ComponentScan(basePackages = "com.emp.angularjs.business.config")
+@EnableMongoRepositories("com.emp.angularjs.business.repository")
 public class MongoConfig {
 	
 	/**
@@ -32,7 +27,7 @@ public class MongoConfig {
 	 * 
 	 * @return	MongoDB instance
 	 */
-	@Bean
+/*	@Bean
 	public static MongoDatabase getMongoDB() {
 		MongoDatabase db = null;
 		if(db == null) {
@@ -46,14 +41,34 @@ public class MongoConfig {
 
 		return db;
 	}
-	
+*/	
 	/**
 	 * Mongo DB Data access class
 	 * 
 	 * @return 		MongoDBDataAccess instance
 	 */
-	@Bean
+/*	@Bean
 	public MongoDBDataAccess getDataAccess () {
 		return new MongoDBDataAccess();
+	}
+*/	
+	/**
+	 * Mongo DB with Spring Data, Data access class
+	 * 
+	 * @return 		SequenceMongoDataAccessImpl instance
+	 */
+	@Bean
+	public SequenceMongoDataAccessImpl getCounterMongoDataAccessImpl () {
+		return new SequenceMongoDataAccessImpl();
+	}
+	
+	/**
+	 * MongoTemplate for Mongo DB with Spring Data
+	 * 
+	 * @return 		MongoTemplate instance
+	 */
+	@Bean
+	public MongoTemplate mongoTemplate() {
+		return new MongoTemplate(new MongoClient(), "EmpDB");
 	}
 }

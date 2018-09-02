@@ -7,10 +7,10 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author Tripti
@@ -18,11 +18,12 @@ import javax.persistence.Table;
  * Represents Organisation
  */
 
-@Entity
+//@Entity
 @Table(name="SYS.ORGANISATION")
+@Document(collection = "organisations")
 public class Organisation {
 	
-	@Id
+	//@Id
 	@Column(name="ORGANISATION_ID")
 	private Long organisationId;
 	
