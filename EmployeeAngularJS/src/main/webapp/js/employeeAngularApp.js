@@ -1,7 +1,9 @@
 /**
- *	Javascript for Employee Angular Application 
+ *	Angular JS Controller for Employee Angular Application. 
  */
 
+ var base_url = window.location.protocol+"//"+window.location.host+"/"+window.location.pathname.split("/")[1];
+ 
  var app = angular.module('myApp', ['ui.router']);
  app.controller ('myController', function($scope, $http, $state){	 
 	 $state.go("welcome");
@@ -15,27 +17,27 @@
  });
  
  app.controller ('addEmpController', function($scope, $http, $state, $stateParams){	 
-	 $http.get("/EmployeeAngularJS/getOrganisations")
+	 $http.get(base_url+"/getOrganisations")
 	 .then(
 	     function(response){
 	    	 $scope.organisationList = response.data;
 	     }), 
 	    function(response){
-	    	 alert("No organisations found");
+		 	//Error handling if any
 	    }
 	 
 	 	
 	 
 	 $scope.populateDepartments = function (){
 	 	//Fetch Departments List for selected organisation Id
-	 	$http.post("/EmployeeAngularJS/getDepartmentsForOrganisation",$scope.selectedOrg.organisationId)
+	 	$http.post(base_url+"/getDepartmentsForOrganisation",$scope.selectedOrg.organisationId)
 		.then(
 		    function(response){
 		    	$scope.departmentList = response.data;
 		    	})
 	 		},
 		    function(response){
-		    	 alert("No Departments found for given organisations");
+	 			//Error handling if any
 		    };
      //Add Employee
 	 $scope.addEmployee = function (){
@@ -44,14 +46,14 @@
 				departmentId : $scope.selectedDept.departmentId,
 				employeeFullName : $scope.employeeFullName
 		 		}
-		 $http.post("/EmployeeAngularJS/addEmployee",inputData)
+		 $http.post(base_url+"/addEmployee",inputData)
 	 	 .then(
  	      function(response){
  	    	  $state.go("addEmpSuccessPage");
  	      	    })
 		    },
 		  function(response){
-			   	 alert("Employee not added successfully");
+		    	//Error handling if any
 		    };
 
 	 $scope.passedEmployeeList = {}
@@ -64,7 +66,7 @@
 				 organisationId : $scope.selectedOrg.organisationId,
 				 departmentId : $scope.selectedDept.departmentId
 			 }
-		 $http.post("/EmployeeAngularJS/searchByOrgAndDept", employee)
+		 $http.post(base_url+"/searchByOrgAndDept", employee)
 		.then(
  	     function(response){
 		    	 var employeeList = angular.toJson(response.data);
@@ -72,7 +74,7 @@
 		     })
 		  },
 		 function(response){
-		   	 alert("Employee not searched successfully");
+			//Error handling if any
 		 }; 
  });
 
@@ -87,7 +89,7 @@
 	 }
 	 
 	 $scope.searchEmployeeById = function (){
-		 $http.post("/EmployeeAngularJS/searchByEmpId",$scope.employeeId)
+		 $http.post(base_url+"/searchByEmpId",$scope.employeeId)
 		 .then(
 		 function(response){
 		   	 var employeeee = angular.toJson(response.data);
@@ -95,34 +97,34 @@
 		  	})
 	 	 },
 		 function(response){
-		   	 alert("Employee not searched successfully");
+	 		//Error handling if any
 	 	 }; 
 
  	 $scope.populateDepartments = function (){
  		 //Fetch Departments List for selected organisation Id
- 		 $http.post("/EmployeeAngularJS/getDepartmentsForOrganisation",$scope.selectedOrg.organisationId)
+ 		 $http.post(base_url+"/getDepartmentsForOrganisation",$scope.selectedOrg.organisationId)
  		 .then(
 	     function(response){
 	    	 	$scope.departmentList = response.data;
 		 	})
   		 },
 		 function(response){
-  			 	alert("No Departments found for given organisations");
+  			 	//Error handling if any
 		 };		    
 		    
 	 $scope.enterDetailsToUpdate = function (){	 
-    	 $http.get("/EmployeeAngularJS/getOrganisations")
+    	 $http.get(base_url+"/getOrganisations")
     	 .then(
 	     function(response){
 	    	 $scope.organisationList = response.data;
 	     }), 
-	    function(response){
-		    	 alert("No organisations found");
+	     function(response){
+    		 //Error handling if any
 		    }
 	    }
 		    
 	$scope.searchToUpdate = function (){
-		 $http.post("/EmployeeAngularJS/searchByEmpId",$scope.employeeId)
+		 $http.post(base_url+"/searchByEmpId",$scope.employeeId)
 		 .then(
 		 function(response){
 		    	 var employee = angular.toJson(response.data);
@@ -130,7 +132,7 @@
 		     })
    		 },
 	     function(response){
-		    	 alert("Employee not searched successfully");
+   			 //Error handling if any
 		 }; 
 		    
 
@@ -141,25 +143,25 @@
 				 organisationId : $scope.selectedOrg.organisationId,
 				 departmentId : $scope.selectedDept.departmentId
 		 }
-		 $http.post("/EmployeeAngularJS/updateEmployeeDetails",employee)
+		 $http.post(base_url+"/updateEmployeeDetails",employee)
 		 .then(
 		  function(response){
 		    	 $state.go("updateEmpSuccessPage")//, {"employee":employee});
 		  		})
 	 	 },
 		 function(response){
-	 		 	 alert("Employee not searched successfully");
+	 		//Error handling if any
 		 }; 
 
 	 $scope.deleteEmployee = function(){
-		 $http.post("/EmployeeAngularJS/deleteEmployee",$scope.passedEmployee.employeeId)
+		 $http.post(base_url+"/deleteEmployee",$scope.passedEmployee.employeeId)
 		 .then(
 	     function(response){
 	    	 $state.go("deleteEmployee");
 	     	})
  		 },
  		 function(response){
- 			 alert("Employee not searched successfully");
+ 			//Error handling if any
  		 };
  		 
 	 $scope.searchByOrgAndDept = function(){
@@ -167,57 +169,3 @@
 	 }
  });
  
- app.config(function($stateProvider, $urlRouterProvider) {	 
-	 $stateProvider
-	 .state('displayAddEmpPage', {
-	     url : '/displayAddEmpPage',
-	     templateUrl : '../views/addEmployee.html',
-	     controller: 'addEmpController'	 
-	 }).state('addEmpSuccessPage', {
-	     url : '/addEmpSuccessful',
-	     templateUrl : '../views/addEmployeeSuccessful.html'
-	 }).state('displaySearchEmpPage', {
-	     url : '/searchEmployee',
-	     templateUrl : '../views/searchEmployee.html',
-	     controller : 'searchEmpController'
-	 }).state('searchByEmpId', {
-	     url : '/searchByEmpId',
-	     templateUrl : '../views/searchByEmpId.html',
-	     controller : 'searchEmpController'
-	 }).state('searchByOrgAndDept', {
-	     url : '/searchByOrgAndDept',
-	     templateUrl : '../views/searchByOrgAndDept.html',
-	     controller : 'addEmpController'
-	 }).state('displayEmpDetails', {
-	     url : '/displayEmpDetails/:employeeee',
-	     templateUrl : '../views/displayEmpDetails.html',
-	     controller : 'searchEmpController'
-	 }).state('displayMultipleEmpDetails', {
-	     url : '/displayMultipleEmpDetails/:employeeList',
-	     templateUrl : '../views/displayMultipleEmpDetails.html',
-	     controller : 'addEmpController'
-	 }).state('displayUpdateEmpPage', {
-	     url : '/updateEmployee', 
-	     templateUrl : '../views/updateEmployee.html',
-		 controller : 'searchEmpController'
-	 }).state('enterDetailsToUpdate', {
-	     url : '/enterDetails/:employee/:organisationList', 
-	     templateUrl : '../views/enterDetailsToUpdate.html',
-		 controller : 'searchEmpController'			 
-	 }).state('detailsToUpdate', {
-	     url : '/displayEmpDetails/:employeeee',
-	     templateUrl : '../views/detailsToUpdate.html',
-	     controller : 'searchEmpController'
-	 }).state('updateEmpSuccessPage', {
-	     url : '/updateEmpSuccessful',
-	     templateUrl : '../views/updateEmployeeSuccessful.html'
-	 }).state('deleteEmployee', {
-	     url : '/deleteEmployee',
-	     templateUrl : '../views/deleteEmployeeSuccessful.html'
-	 }).state('welcome', {
-		 url : "/welcome",
-		 templateUrl : '../views/employeeHomePage.html',
-		 controller : 'myController'
-	 });
-	 
-});
