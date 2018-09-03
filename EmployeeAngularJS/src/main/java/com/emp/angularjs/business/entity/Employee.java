@@ -4,12 +4,12 @@
 package com.emp.angularjs.business.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author Tripti
@@ -17,15 +17,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Represents an Employee
  */
 
-@Document(collection = "employeeDetails")
+@Entity
 @Table(name="SYS.EMPLOYEE")
 public class Employee {
 
 	@Id
-	private String mongoGeneratedId;
-	
 	@Column(name="EMP_ID")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SYS.EMPLOYEE_ID_SEQ")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="empIdSequence")
+	@SequenceGenerator(name = "empIdSequence", sequenceName = "SYS.EMPLOYEE_ID_SEQ", allocationSize = 1)
 	private Long employeeId;
 	
 	@Column(name = "EMP_FULL_NAME")
@@ -37,22 +36,6 @@ public class Employee {
 	@Column(name="DEPARTMENT_ID")
 	private Long departmentId;
 
-	/**
-	 * 
-	 * @return the mongoGeneratedId.
-	 */
-	public String getMongoGeneratedId() {
-		return mongoGeneratedId;
-	}
-
-	/**
-	 * 
-	 * @param mongoGeneratedId the mongoGeneratedId to set.
-	 */
-	public void setMongoGeneratedId(String mongoGeneratedId) {
-		this.mongoGeneratedId = mongoGeneratedId;
-	}
-	
 	/**
 	 * @return the employeeId
 	 */

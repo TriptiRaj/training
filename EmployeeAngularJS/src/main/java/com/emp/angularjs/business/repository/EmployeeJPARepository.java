@@ -5,16 +5,15 @@ package com.emp.angularjs.business.repository;
 
 import java.util.List;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.repository.CrudRepository;
 
 import com.emp.angularjs.business.entity.Employee;
 
 /**
  * @author Tripti
- * 
- * Repository for Employee collection within Mongo DB.
+ *
  */
-public interface EmployeeMongoRepository extends MongoRepository<Employee, String> {
+public interface EmployeeJPARepository extends CrudRepository<Employee, Long> {
 
 	public Employee findByEmployeeId(Long employeeId);
 	
