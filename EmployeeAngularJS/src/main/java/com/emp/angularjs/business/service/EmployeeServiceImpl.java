@@ -27,21 +27,6 @@ import com.emp.angularjs.business.repository.OrganisationJPARepository;
 @EnableTransactionManagement
 public class EmployeeServiceImpl implements EmployeeService{
 
-/*	@Autowired
-	private EmployeeDataAccess empDataAccess;*/
-	
-/*	@Autowired
-	private MongoDBDataAccess empDataAccess;*/
-	
-/*	@Autowired
-	private EmployeeMongoRepository empMongoRepository;
-	
-	@Autowired
-	private OrganisationMongoRepository orgMongoRepository;
-	
-	@Autowired
-	private SequenceMongoDataAccessImpl sequenceMongoDataAccessImpl;*/
-	
 	@Autowired
 	private EmployeeJPARepository empJpaRepository;
 	

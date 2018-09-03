@@ -4,6 +4,8 @@
 package com.emp.angularjs.business.config;
 
 import javax.persistence.EntityManagerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javax.persistence.Persistence;
 
 import org.springframework.context.annotation.Bean;
@@ -23,19 +25,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class JPAConfig {
 
-	//private static final Logger LOGGER = LogManager.getLogger(JPAConfig.class);
+	private static final Logger LOGGER = LogManager.getLogger(JPAConfig.class);
 
-/*	@Bean//(name = "getEntityManager")
-	public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
-		final EntityManagerFactory entityManagerFactory = Persistence
-				.createEntityManagerFactory("EmployeePersistentUnit");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		LOGGER.info("Entity Manager succesfully created.");
-		return entityManager;
-	}*/
-  
 	@Bean
 	public EntityManagerFactory entityManagerFactory() {
+		LOGGER.debug("Creating EntityManger");
+		LOGGER.info("Creating EntityManger");
 	    return Persistence.createEntityManagerFactory("EmployeePersistentUnit");
 	  }
 	
@@ -43,6 +38,8 @@ public class JPAConfig {
     JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory);
+		LOGGER.debug("Created Transaction Manager");
+		LOGGER.info("Created Transaction Manager");
         return transactionManager;
     }
 

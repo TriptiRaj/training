@@ -5,6 +5,8 @@ package com.emp.angularjs.business.controller;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
@@ -27,18 +29,17 @@ import com.emp.angularjs.business.service.EmployeeService;
 @RestController
 public class EmployeeControllerImpl implements EmployeeController {
 	
+	private static final Logger LOGGER = LogManager.getLogger(EmployeeControllerImpl.class);
+	
 	@Autowired
 	private EmployeeService empService;
-	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String displayHomePage() {
-		return "employeeAngularJS";
-	}
 	
 	@RequestMapping("displayAddEmpPage")
 	public ResponseEntity<List<Organisation>> displayAddEmployeePage() {
 		List <Organisation>  organisationList = empService.getOrganisations();
 		ResponseEntity<List<Organisation>> responseEntity = new ResponseEntity<List<Organisation>>(organisationList, HttpStatus.OK);
+		LOGGER.debug("in EmployeeControllerImpl.displayAddEmployeePage(). Organisations fetched are - "+ organisationList);
+		LOGGER.info("Organiations fetched successfully");
 		return responseEntity;
 	}
 	
@@ -53,7 +54,9 @@ public class EmployeeControllerImpl implements EmployeeController {
 		employee.setOrganisationId(requestEntity.getBody().getOrganisationId());
 		employee.setDepartmentId(requestEntity.getBody().getDepartmentId());
 		empService.addEmployee(employee);
-		ResponseEntity<String> responseEntity = new ResponseEntity<String>("", HttpStatus.OK);			
+		ResponseEntity<String> responseEntity = new ResponseEntity<String>("", HttpStatus.OK);
+		LOGGER.debug("in EmployeeControllerImpl.addEmployee(). Employee added successfully - "+ employee);
+		LOGGER.info("Employee added successfully.");		
 		return responseEntity;
 	}
 
@@ -63,6 +66,8 @@ public class EmployeeControllerImpl implements EmployeeController {
 	@Override
 	@RequestMapping(value="updateEmployeeDetails", method=RequestMethod.POST)
 	public void updateEmplpoyee(RequestEntity<Employee> requestEntity) {
+		LOGGER.debug("in EmployeeControllerImpl.updateEmplpoyee(). Updating employee - "+ requestEntity.getBody());
+		LOGGER.info("About to update Employee");
 		empService.updateEmplpoyee(requestEntity.getBody());
 	}
 
@@ -75,6 +80,8 @@ public class EmployeeControllerImpl implements EmployeeController {
 		Employee employee = requestEntity.getBody();
 		List <Employee> employeeList = empService.searchEmployee(employee.getOrganisationId(), employee.getDepartmentId());
 		ResponseEntity<List<Employee>> responseEntity = new ResponseEntity<List<Employee>>(employeeList, HttpStatus.OK);
+		LOGGER.debug("in EmployeeControllerImpl.searchEmployee(). Searching employee by Organisation Id - "+ employee.getOrganisationId()+ " and Department Id - "+employee.getDepartmentId());
+		LOGGER.info("Employee searched successfully");
 		return responseEntity;
 	}
 
@@ -87,9 +94,13 @@ public class EmployeeControllerImpl implements EmployeeController {
 		Employee employee = empService.searchEmployeeById(requestEntity.getBody());
 		ResponseEntity< Employee> responseEntity = null;
 		if(employee == null) {
+			LOGGER.debug("in EmployeeControllerImpl.searchEmployeeById(). Employee not found for the employee Id - "+requestEntity.getBody());
+			LOGGER.info("Employee not found for given Employee Id.");
 			employee = new Employee();
 		}
 		responseEntity = new ResponseEntity<Employee>(employee,HttpStatus.OK);
+		LOGGER.debug("in EmployeeControllerImpl.searchEmployee(). Employee searched for employee Id - "+requestEntity.getBody()+" is - "+employee);
+		LOGGER.info("Employee searched successfully");
 		return responseEntity;
 	}
 	
@@ -100,6 +111,8 @@ public class EmployeeControllerImpl implements EmployeeController {
 	@RequestMapping(value="deleteEmployee", method = RequestMethod.POST)
 	public void deleteEmployee(RequestEntity<Long> requestEntity) {
 		empService.deleteEmployee(requestEntity.getBody());
+		LOGGER.debug("Employee Deleted for employee Id - "+requestEntity.getBody());
+		LOGGER.info("Employee deleted successfully");
 	}
 
 	/* (non-Javadoc)
@@ -113,8 +126,12 @@ public class EmployeeControllerImpl implements EmployeeController {
 		ResponseEntity<List<Department>> responseEntity;
 		if(departmentsList.isEmpty()) {
 			responseEntity = new ResponseEntity<List<Department>>(HttpStatus.NO_CONTENT);
+			LOGGER.debug("No Departments found for organisation Id - "+organisationId);
+			LOGGER.info("No Departments found for selected organisation.");
 		}else {
-			responseEntity = new ResponseEntity<List<Department>>(departmentsList, HttpStatus.OK);	
+			responseEntity = new ResponseEntity<List<Department>>(departmentsList, HttpStatus.OK);
+			LOGGER.debug("Departments found for organisation Id - "+organisationId+ " are - "+departmentsList);
+			LOGGER.info("Departments for selected organisation found successfully");
 		}		
 		return responseEntity;
 	}
@@ -126,8 +143,11 @@ public class EmployeeControllerImpl implements EmployeeController {
 		ResponseEntity<List<Organisation>> responseEntity;
 		if(organisationList.isEmpty()) {
 			responseEntity = new ResponseEntity<List<Organisation>>(HttpStatus.NO_CONTENT);
+			LOGGER.debug("No Organisations found.");
 		}else {
-			responseEntity = new ResponseEntity<List<Organisation>>(organisationList, HttpStatus.OK);	
+			responseEntity = new ResponseEntity<List<Organisation>>(organisationList, HttpStatus.OK);
+			LOGGER.debug("Organisations found - "+organisationList);
+			LOGGER.info("Organisations found successfully");
 		}		
 		return responseEntity;
 	}
