@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.emp.angularjs.business.entity.Department;
 import com.emp.angularjs.business.entity.Employee;
@@ -22,6 +24,7 @@ import com.emp.angularjs.business.repository.OrganisationJPARepository;
  *
  */
 @Service
+@EnableTransactionManagement
 public class EmployeeServiceImpl implements EmployeeService{
 
 /*	@Autowired
@@ -49,12 +52,13 @@ public class EmployeeServiceImpl implements EmployeeService{
 	private OrganisationJPARepository orgJpaRepository;
 	
 	@Override
+	@Transactional
 	public void addEmployee(final Employee employee) {
-		//employee.setEmployeeId(sequenceMongoDataAccessImpl.generateNextValue("EMP_SEQ"));
 		empJpaRepository.save(employee);
 	}
 
 	@Override
+	@Transactional
 	public void updateEmplpoyee(final Employee employee) {
 		empJpaRepository.save(employee);
 	}
@@ -72,6 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 
 	@Override
+	@Transactional
 	public void deleteEmployee(final Long employeeId) {
 		empJpaRepository.deleteByEmployeeId(employeeId);		
 	}
