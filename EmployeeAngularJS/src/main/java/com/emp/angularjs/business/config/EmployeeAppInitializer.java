@@ -18,7 +18,7 @@ public class EmployeeAppInitializer extends AbstractAnnotationConfigDispatcherSe
 	 */
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class[] {JPAConfig.class};
+		return new Class[] {MongoConfig.class};
 	}
 
 	/* (non-Javadoc)

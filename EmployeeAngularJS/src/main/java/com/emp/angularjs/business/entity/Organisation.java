@@ -5,11 +5,6 @@ package com.emp.angularjs.business.entity;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -18,19 +13,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Represents Organisation
  */
 
-//@Entity
-@Table(name="SYS.ORGANISATION")
 @Document(collection = "organisations")
 public class Organisation {
 	
 	//@Id
-	@Column(name="ORGANISATION_ID")
 	private Long organisationId;
 	
-	@Column(name="ORGANISATION_NAME")
 	private String organisationName;
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
 	private List<Department> departments;
 
 	/**

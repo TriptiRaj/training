@@ -1,0 +1,8 @@
+<a ui-sref ="displaySearchEmpPage"  ui-sref-active="active">Back to Search Employee Page</a><br>
+<a ui-sref ="welcome" >Back to Home Page</a>
+<br>
+<form>
+	<input type="hidden" ng-model = "employee">
+	<p>Employee Id : <input type="text" ng-model="employeeId" required></p>
+	<button ng-click = searchEmployeeById() >Search</button>
+</form>	

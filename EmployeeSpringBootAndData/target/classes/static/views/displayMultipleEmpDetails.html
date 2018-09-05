@@ -1,0 +1,21 @@
+<a ui-sref ="welcome">Back to Home Page</a><br>
+<a ui-sref ="displaySearchEmpPage">Back to Search Employee Page</a><br>
+<a ui-sref ="searchByOrgAndDept">Back to Search By Organisation and Department Page</a><br>
+
+<div ng-show = "passedEmployeeList.length > 0">
+	<table>
+	<tr>
+		<th>S.No.</th>
+		<th>Employee Id</th>
+		<th>Employee Full name</th>
+	</tr>
+	<tr  ng-repeat = "employee in passedEmployeeList">
+		<td>{{ $index + 1 }}</td>
+		<td>{{employee.employeeId}}</td>
+		<td>{{employee.employeeFullName}}</td>
+	</tr>
+	</table>
+</div>
+<div ng-hide = "passedEmployeeList.length > 0">
+	<p>No Employee data found.</p>
+</div>

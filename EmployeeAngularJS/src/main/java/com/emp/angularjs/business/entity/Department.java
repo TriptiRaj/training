@@ -3,30 +3,19 @@
  */
 package com.emp.angularjs.business.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 /**
  * @author Tripti
  * 
  * Represents Department
  */
 
-@Entity
-@Table(name="SYS.DEPARTMENT")
 public class Department {
 
-	@Column(name="DEPARTMENT_ID")
-	@Id
 	//@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SYS.DEPARTMENT_ID_SEQ")
 	private Long departmentId;
 	
-	@Column(name="DEPARTMENT_NAME")
 	private String departmentName;
 	
-	@Column(name="ORGANISATION_ID")
 	private Long organisationId;
 
 	/**

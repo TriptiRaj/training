@@ -1,0 +1,19 @@
+<a ui-sref ="welcome"  ui-sref-active="active">Back to Home Page</a><br>
+<a ui-sref ="displaySearchEmpPage">Back to Search Employee Page</a><br>
+<a ui-sref ="searchByEmpId" ="active">Back Search Employee By Id Page</a><br>
+
+<br>
+<br>
+<table ng-show = "passedEmployee.employeeId">
+<tr>
+	<th>S.No.</th>
+	<th>Employee Id</th>
+	<th>Employee Full name</th>
+</tr>
+<tr>
+	<td>{{ $index + 1 }}</td>
+	<td>{{passedEmployee.employeeId}}</td>
+	<td>{{passedEmployee.employeeFullName}}</td>
+</tr>
+</table>
+<p ng-hide = "passedEmployee.employeeId">No Employee data found.</p>
