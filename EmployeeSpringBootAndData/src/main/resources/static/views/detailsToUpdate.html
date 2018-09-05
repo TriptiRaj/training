@@ -1,0 +1,40 @@
+<a ui-sref ="welcome">Back to Home Page</a><br>
+<a ui-sref ="displayUpdateEmpPage">Back to Update/Delete search Page</a><br>
+
+<br>
+<div ng-hide = "organisationList">
+	<div ng-show = "passedEmployee.employeeId">
+		<table>
+		<tr>
+			<th>S.No.</th>
+			<th>Employee Id</th>
+			<th>Employee Full name</th>
+		</tr>
+		<tr>
+			<td>{{ $index + 1 }}</td>
+			<td>{{passedEmployee.employeeId}}</td>
+			<td>{{passedEmployee.employeeFullName}}</td>
+		</tr>
+		</table>		
+		<button ng-click = enterDetailsToUpdate() >Update</button>
+		<button ng-click = deleteEmployee() >Delete</button>
+	</div>
+</div>
+<div>
+<p ng-hide = "passedEmployee.employeeId">No Records found.</p>
+</div>
+
+
+<div ng-show = "organisationList">
+	<a ui-sref ="welcome">Back to Home Page</a>
+	<br>
+	<form>
+		<p>Employee Id :<input type = "text" ng-model = "passedEmployee.employeeId" disabled = "true"></p>
+		<p>Employee Name: <input type="text" ng-model="passedEmployee.employeeFullName" required></p>	
+		<p>Employee Organisation : <select ng-model = "selectedOrg" ng-options = "x.organisationName for x in organisationList" ng-change = "populateDepartments()" required></select></p>
+		<input type = "hidden" ng-model = "passedEmployee.organisationId" value = {{selectedOrg.organisationId}}>
+		<p>Employee Department : <select ng-model = "selectedDept" ng-options = "x.departmentName for x in departmentList" required></select></p>
+		<input type = "hidden" ng-model = "passedEmployee.departmentId" value = selectedDept.departmentId}}>	
+		<button ng-click = updateEmployeeDetails() >Update</button>
+	</form>
+</div>
